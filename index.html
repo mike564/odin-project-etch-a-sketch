@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang = "eng">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Your description goes here">
+  	<meta name="keywords" content="one, two, three">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Permanent+Marker&family=Press+Start+2P&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,300;1,700;1,900&family=Shizuru&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>Etch-A-Sketch</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>ETCH-A-SKETCH!!!!</h1>
+        <span><a href="https://github.com/mike564/odin-project-etch-a-sketch">By Michael Nguyen</a></span>
+    </header>
+    
+    <div class="cont">
+
+        <section class="etch">
+            <section class="drawing-cont"></section>
+            <input type="range" min="0" max="1" value="0" class="slider" id="myRange" step="any">
+            <span>Slide to erase! (Note: Go slower at higher resolutions)</span>
+        </section>
+
+        <section class="options">
+            <section class="colors">
+                <button class="color-btn wht-txt def-color black">Black</button>
+                <button class="color-btn white">White</button>
+                <button class="color-btn red ">Red</button>
+                <button class="color-btn wht-txt brown">Brown</button>
+                <button class="color-btn orange">Orange</button>
+                <button class="color-btn yellow">Yellow</button>
+                <button class="color-btn cyan">Cyan</button>
+                <button class="color-btn green">Green</button>
+                <button class="color-btn wht-txt blue">Blue</button>
+                <button class="color-btn wht-txt purple">Purple</button>
+            </section>
+
+            <section class="shade-cont">
+                <button class="shade-btn">Shading ON</button>
+            </section>
+
+            <section class="canvas">
+                    <h2>Resolution H x W (Max:99)</h2>
+                    <div class="grid-dim-cont"><input class="grid-dim" type="text" value="16"><div>X</div><input class="grid-dim disabled" type="text" placeholder="16" disabled="true"></div>
+                    <button class="new-btn" onclick="NewCanvas()">Create / Clear Canvas</button>
+            </section>
+        </section>
+    </div>
+
+    
+
+
+
+
+
+    <script src="./js/main.js"></script>
+</body>
+</html>
