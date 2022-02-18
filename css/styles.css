@@ -34,16 +34,9 @@ span{
     text-align: center;
 }
 
-.new-btn,.shade-btn{
-    display: block;
-    font-weight: bolder;
-    padding:10px 20px;
-    border-radius:20px;
-    margin:10px 0;
-    height: 40px;
-    width: 200px;
-    box-shadow: 1px 1px 2px 1px black;
-}
+/******************************/
+/* OPTIONS PANEL */
+/******************************/
 
 .cont{
     display: flex;
@@ -59,19 +52,15 @@ span{
 .drawing-cont{
     width: 70%;
     display:grid;
-    justify-content: center;
-    flex-wrap: wrap;
-    grid-template-columns: auto;
-    color:white;
     margin:0 auto;
     box-shadow: 2px 5px 10px 10px black;
 }
 
 .grid-block{
-    height:1px;
-    width:1px;
-    border: 1px dashed lightgray;
-    background-color: white;
+    height:100%;
+    width:100%;
+    border: 1px dashed rgb(158, 158, 158);
+    background-color: rgb(255, 255, 255);
     user-select: none;
     touch-action: none;
 }
@@ -80,17 +69,14 @@ span{
     border: 2px solid black;
 }
 
-.clicked{
-    background-color: black;
-}
-
 .slider{
     display: block;
     margin: 2% auto;
-    color:red;
- 
 }
 
+/******************************/
+/* OPTIONS PANEL */
+/******************************/
 
 .options{
     padding:2%;
@@ -104,7 +90,7 @@ span{
     justify-content: space-evenly;
 }
 
-.colors{
+.colors-cont{
     display: flex;
     flex-wrap: wrap;
 }
@@ -117,6 +103,17 @@ span{
     border:2px solid black;
     margin:0%;
     width:22%;
+}
+
+.new-btn,.shade-btn{
+    display: block;
+    font-weight: bolder;
+    padding:10px 20px;
+    border-radius:20px;
+    margin:10px 0;
+    height: 40px;
+    width: 200px;
+    box-shadow: 1px 1px 2px 1px black;
 }
 
 .wht-txt{
@@ -146,6 +143,10 @@ span{
 /******************************/
 .black{
     background-color: rgb(0, 0, 0);
+}
+
+.grey{
+    background-color: rgb(211, 211, 211);
 }
 
 .white{
@@ -185,7 +186,7 @@ span{
 }
 
 /******************************/
-/* COLORS */
+/* MOBILE */
 /******************************/
 
 @media screen and (max-width:700px){

@@ -3,48 +3,8 @@
 /****************************/
 
 //Sets the current color in the pallette
-function setColor(e){
-    colorName = this.textContent.toLowerCase();
-    
-    if(colorName=='black'){
-        color = 'rgb(0, 0, 0)';
-    }
-    
-    if(colorName=='white'){
-        color = 'rgb(255, 255, 255)';
-    }
-    
-    if(colorName=='red'){
-        color = 'rgb(255, 0, 0)';
-    }
-    
-    if(colorName=='brown'){
-        color =  'rgb(165, 42, 42)';
-    }
-    
-    if(colorName=='orange'){
-        color =  'rgb(255, 165, 0)';
-    }
-    
-    if(colorName=='yellow'){
-        color = 'rgb(255, 255, 0)';
-    }
-    
-    if(colorName=='cyan'){
-        color =  'rgb(0, 255, 255)';
-    }
-    
-    if(colorName=='green'){
-        color =  'rgb(0, 255, 0)';
-    }
-    
-    if(colorName=='blue'){
-        color =  'rgb(0, 0, 255)';
-    }
-    
-    if(colorName=='purple'){
-        color = 'rgb(128, 0, 128)';
-    }
+function setColor(){
+    color = getComputedStyle(this).backgroundColor;
     
     colorButtons.forEach(function(thisObj){
         if(thisObj.textContent!=color){
@@ -52,6 +12,7 @@ function setColor(e){
             
         }
     })
+
     gridDiv.forEach(function(thisObj){
         thisObj.classList.remove('marked');
     })
@@ -71,10 +32,11 @@ function shadeOnOFf(){
 }
 
 //Adds selected background color. Adds event listener to continue coloring on blocks that are hovered over
-function startColor(e){
-    //Allows colors to be shaded more over repeated areas if shading is enabled
-    if(this.classList[1]=='marked' && shading==true){
+function startColor(){
+    //Allows colors to be shaded more over repeated areas if shading is enabled and color is not white
+    if(this.classList[1]=='marked' && shading==true && color != 'rgb(255, 255, 255)'){
         let previousRgb = this.style.backgroundColor.match(/\d*/g);
+        //Numerical characters are extracted at index 4,7,and 10 respectively
         this.style.backgroundColor = "rgb("+(previousRgb[4]*0.8)+", "+(previousRgb[7]*0.8)+", "+(previousRgb[10]*0.8)+")";
     }
 
@@ -99,13 +61,13 @@ function stopColor(){
 
 //Allows blocks to be erased depending on slider position similiar to an actual etch a sketch
 function slideErase(){
-    let axis = parseInt(slider.value);
+    let sliderValue = parseInt(slider.value);
     let i=1;
     gridDiv.forEach(function(thisObj){
-        if(i==axis){
+        if(i==sliderValue){
             thisObj.style.backgroundColor = "rgb(255, 255, 255";
             thisObj.classList.remove('marked');
-            axis+=gridSizeXSize;
+            sliderValue+=gridResolution;
             }
         i++  
         }    
@@ -114,26 +76,26 @@ function slideErase(){
 
 //Allows grid and blocks to be resized when window is changed
 function resizeGrid(){
-    setColmunWidth();
-    setGridBlockWidth()
+    setColumnsRows();
+    setGridBlockProperties()
     setSliderParameters();
 }
 
 //Clears canvas and creates new grid. 
 function NewCanvas(){
     //Stoes orginal grid in case user enters invalid value
-    let newGridSizeXSize=parseInt(document.querySelector('.grid-dim').value);
-    if(isNaN(newGridSizeXSize)||newGridSizeXSize>99 || newGridSizeXSize<1){
+    let newGridResolution=parseInt(document.querySelector('.grid-dim').value);
+    if(isNaN(newGridResolution)||newGridResolution>99 || newGridResolution<1){
         alert("Invalid value. Please input a number between 1 and 99");
     }
     else{
-        gridSizeXSize = newGridSizeXSize;
+        gridResolution = newGridResolution;
         //Updates the text box to match the height input
-        document.querySelector('.disabled').placeholder = gridSizeXSize;
+        document.querySelector('.disabled').placeholder = gridResolution;
         clearBlocks()
         createBlocks();
-        setColmunWidth()
-        setGridBlockWidth();
+        setColumnsRows()
+        setGridBlockProperties();
         setGridBlockEvents();
         setSliderParameters()
     }
@@ -152,35 +114,33 @@ function clearBlocks(){
 
 //Adds new blocks to container
 function createBlocks(){
-    for(let i=0;i<(gridSizeXSize*gridSizeXSize);i++){ 
+    for(let i=0;i<(gridResolution*gridResolution);i++){ 
             drawingContainer.appendChild(document.createElement('div'));
         }
     
-    //Converts node array to regular array
-    gridDiv = Array.from(drawingContainer.children);    
-    
+    //store generated blocks in a nodelist;
+    gridDiv = drawingContainer.childNodes; 
 }
 
-//Calculates and sets the grid column width based on container size for new canvas or window resizing
-function setColmunWidth(){
+//Calculates and sets the grid column and rows length based on container size for new canvas or window resizing
+function setColumnsRows(){
     drawingContainerWidth=getComputedStyle(drawingContainer).width.match(/\d*/);
-    columnWidth = drawingContainerWidth[0]/gridSizeXSize;
-    columnsCssString = "";
+    columnWidth = drawingContainerWidth[0]/gridResolution;
+    let cssText = "";
 
     //Creates string for CSS property
-    for(let i=0;i<(gridSizeXSize);i++){ 
-        columnsCssString += columnWidth+"px ";
+    for(let i=0;i<gridResolution;i++){ 
+        cssText += columnWidth+"px ";
     }
 
-    drawingContainer.style.gridTemplateColumns = columnsCssString;
+    drawingContainer.style.gridTemplateColumns = cssText;
+    drawingContainer.style.gridTemplateRows = cssText;
 }
 
-//Sets individual grid block width and height based on grid column width. Adds additional CSS properties using a class
-function setGridBlockWidth(){
+//Adds specified CSS properties for grid blocks
+function setGridBlockProperties(){
     gridDiv.forEach(function(thisObj){
         thisObj.classList.add('grid-block');
-        thisObj.style.height = columnWidth+"px";
-        thisObj.style.width = columnWidth+"px";
         }
     )
 }
@@ -189,7 +149,6 @@ function setGridBlockEvents(){
     //gridDiv = Array.from(drawingContainer.children);
     gridDiv.forEach(function(thisObj){
         thisObj.addEventListener('mousedown',startColor);
-        thisObj.addEventListener('touchstart',startColor);
         }
     )
 }
@@ -198,8 +157,8 @@ function setGridBlockEvents(){
 /*SLIDER BUILDING FUNCIONS
 /****************************/
 function setSliderParameters(){
-    slider.max=gridSizeXSize+1;
-    slider.style.width=columnWidth*(gridSizeXSize)+"px" 
+    slider.max=gridResolution+1;
+    slider.style.width=columnWidth*(gridResolution)+"px" 
 }
 
 //SELECTORS
@@ -209,19 +168,16 @@ const colorButtons = document.querySelectorAll('.color-btn');
 const shadingToggle = document.querySelector(".shade-btn");
 
 //DEFAULT VALUES AND GLOBAL VARIABLES
-let gridSizeXSize = 16;
-let drawingContainerWidth;
-let columnWidth;
-let columnsCssString = "";
-let gridDiv=[];
-let colorName = 'black';
 let color = 'rgb(0, 0, 0)';
 let shading = true;
+let gridResolution = 16;
+let drawingContainerWidth;
+let columnWidth;
+let gridDiv;
+
 
 //STARTING EVENT LISTENERS
-
 window.addEventListener('mouseup',stopColor);
-window.addEventListener('touchend',stopColor);
 window.addEventListener('resize',resizeGrid);
 slider.addEventListener('input',slideErase);
 colorButtons.forEach(function(thisObj){
@@ -232,7 +188,7 @@ shadingToggle.addEventListener('click',shadeOnOFf)
 
 //INITIALIZING FUNCTIONS
 createBlocks();
-setColmunWidth()
-setGridBlockWidth();
+setColumnsRows()
+setGridBlockProperties();
 setGridBlockEvents();
 setSliderParameters()
